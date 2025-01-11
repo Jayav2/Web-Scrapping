@@ -1,0 +1,41 @@
+from bs4 import BeautifulSoup
+import requests
+headers = {
+"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/
+webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+"Accept-Encoding": "gzip, deflate, br, zstd",
+"Host": "www.imdb.com",
+"Sec-Ch-Ua": "\"Not A;Brand\";v=\"99\", \"Opera\";v=\"113\", \"Chromium\";v=\"127\"",
+"Sec-Ch-Ua-Mobile": "?0",
+"Sec-Ch-Ua-Platform": "\"macOS\"",
+"Sec-Fetch-Dest": "document",
+"Sec-Fetch-Mode": "navigate",
+"Sec-Fetch-Site": "none",
+"Sec-Fetch-User": "?1",
+"Upgrade-Insecure-Requests": "1",
+"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML,
+like Gecko) Chrome/127.0.0.0 Safari/537.36 OPR/113.0.0.0",
+"X-Amzn-Trace-Id": "Root=1-66dd4cc4-56c335f74c178ab1490eff4c"
+}
+URL = 'https://www.imdb.com/calendar/?ref_=nv_mv_cal'
+page = requests.get(URL, headers=headers)
+soup1 = BeautifulSoup(page.content, "html.parser")
+print(soup1.prettify())
+movies = soup1.find_all('div', class_='title')
+dates=soup1.find_all('div', class_='ipc-title__text')
+import csv
+header = ['Title','Date']
+for movie in movies:
+title = movie.strip()
+print("Movie name:")
+print(title)
+for i in dates:
+print("Date of release:",i)
+data = [title,dates]
+with open('WebScraperDataset.csv', 'w', newline='', encoding='UTF8') as f:
+writer = csv.writer(f)
+writer.writerow(header)
+writer.writerow(data)
+import pandas
+filee= pd.read_csv(r'C:\Users\jay\WebScraperDataset.csv')
+print(filee)
